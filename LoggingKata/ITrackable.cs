@@ -1,8 +1,7 @@
-﻿namespace LoggingKata
+﻿namespace LoggingKata;
+
+public interface ITrackable
 {
-    public interface ITrackable
-    {
-        string Name { get; set; }
-        Point Location { get; set; }
-    }
+    string Name { get; set; }
+    Point Location { get; set; }
 }
