@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LoggingKata;
+namespace LoggingKata.Models;
 
-public class TacoBell : ITrackable
+public class TacoBellLocation : ITrackable
 {
     public string Name { get; set; }
     public Point Location { get; set; }

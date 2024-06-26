@@ -5,26 +5,41 @@ using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 
 using LoggingKata;
+using CsvHelper.Configuration;
+using CsvHelper;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using LoggingKata.Models;
+using DotNetEnv;
 
 public static class API_AddressToCoords
 {
-    public static async Task RunAPI()
+    public static async Task<((double, double), string)> RunAPI(string address)
     {
-        string address = "5731 11A AVE NW, EDMONTON, AB";
-        string apiKey = "8e4735d28ba84ce2b5bba5b838168162";
+        
 
+        // Access the environment variables
+        string apiKey = Environment.GetEnvironmentVariable("API_KEY");
+        
+        //Console.WriteLine(apiKey);
+
+
+        ((double, double), string) coordinates = new();
         try
         {
-            var coordinates = await GetCoordinatesFromAddress(address, apiKey);
-            Console.WriteLine($"Latitude: {coordinates.Item1}, Longitude: {coordinates.Item2}");
+            coordinates = await GetCoordinatesFromAddress(address, apiKey);
+            Console.WriteLine($"Latitude: {coordinates.Item1.Item1}\tLongitude: {coordinates.Item1.Item2}\tAddress: {coordinates.Item2}");
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error: {ex.Message}");
         }
+
+        return coordinates;
     }
 
-    public static async Task<(double, double)> GetCoordinatesFromAddress(string address, string apiKey)
+    private static async Task<((double, double), string)> GetCoordinatesFromAddress(string address, string apiKey)
     {
         string url = $"https://api.opencagedata.com/geocode/v1/json?q={Uri.EscapeDataString(address)}&key={apiKey}";
 
@@ -39,7 +54,9 @@ public static class API_AddressToCoords
                 double lat = location["lat"].Value<double>();
                 double lng = location["lng"].Value<double>();
 
-                return (lat, lng);
+                var adrs = json["results"][0]["formatted"].Value<string>();
+
+                return ((lat, lng), adrs);
             }
             else
             {

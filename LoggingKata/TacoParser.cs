@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using LoggingKata.Logger;
+using LoggingKata.Models;
 
 namespace LoggingKata;
 
@@ -46,7 +48,7 @@ public class TacoParser
         point.Latitude = latitude;
         point.Longitude = longitude;
         // TODO: Create an instance of the TacoBell class
-        TacoBell tacoBell = new TacoBell();
+        TacoBellLocation tacoBell = new TacoBellLocation();
         // TODO: Set the values of the class correctly (Name and Location)
         tacoBell.Name = name;
         tacoBell.Location = point;

@@ -2,6 +2,11 @@ using System;
 using System.Linq;
 using System.IO;
 using GeoCoordinatePortable;
+using LoggingKata.API;
+using LoggingKata.Models;
+using LoggingKata.Logger;
+using System.Collections.Generic;
+using DotNetEnv;
 
 namespace LoggingKata;
 
@@ -9,22 +14,25 @@ class Program
 {
     static readonly ILog logger = new TacoLogger();
     const string csvPath = "TacoBell-US-AL.csv";
-
     static void Main(string[] args)
     {
-        WebScraper_GetAddress.RunWebScraper().Wait();
+        // Load the .env file
+        string filepath = "secret.env";
+        Env.Load(@"../../../" + filepath);
 
-        //API_AddressToCoords.RunAPI().Wait();
+        try
+        {
+            WebScraper_GetAddress.RunWebScraper().Wait();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
 
-
-        // Objective: Find the two Taco Bells that are the farthest apart from one another.
-        // Some of the TODO's are done for you to get you started. 
+        // Objective: Find the two Taco Bells that are the farthest apart from one another. 
 
         //logger.LogInfo("Log initialized");
-
-        // Use File.ReadAllLines(path) to grab all the lines from your csv file. 
-        // Optional: Log an error if you get 0 lines and a warning if you get 1 line
-        string[] lines = File.ReadAllLines(csvPath);
+        string[] lines = File.ReadAllLines(@"CSV_Files/" + csvPath);
         if (lines.Length == 0)
         {
             logger.LogError("No lines found in csv file.");
