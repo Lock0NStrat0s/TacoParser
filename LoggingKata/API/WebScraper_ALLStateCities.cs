@@ -70,6 +70,7 @@ public static class WebScraper_ALLStateCities
                     HtmlNodeCollection locationNodesInner = null;
                     try
                     {
+                        //ALL US STATE LOCATIONS
                         locationNodesInner = documentInner.DocumentNode.SelectNodes("//div[contains(@class, 'AddressRow')]");
                     }
                     catch (Exception e)
@@ -91,7 +92,6 @@ public static class WebScraper_ALLStateCities
                                 locations.Add(temp);
                                 temp = "";
                             }
-
                         }
                     }
                     else
@@ -99,9 +99,6 @@ public static class WebScraper_ALLStateCities
                         Console.WriteLine("No inner location nodes found.");
                     }
                 }
-
-                //ALL US STATE LOCATIONS
-                //locationNodes = await GetAllAlabamaLocations(document, url, client);
             }
             catch (Exception e)
             {

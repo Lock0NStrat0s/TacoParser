@@ -7,7 +7,6 @@ using LoggingKata.Models;
 using LoggingKata.Logger;
 using System.Collections.Generic;
 using DotNetEnv;
-using CsvHelper;
 
 namespace LoggingKata;
 
@@ -15,8 +14,8 @@ class Program
 {
     static readonly ILog logger = new TacoLogger();
     const string csvPath1 = "TacoBell-US-AL.csv";
-    const string csvPath2 = "TacoBellCanada.csv";
-    const string csvPath3 = "TacoBellAlabamaLocations.csv";
+    //const string csvPath2 = "TacoBellCanada.csv";
+    //const string csvPath3 = "TacoBellAlabamaLocations.csv";
     static void Main(string[] args)
     {
         /*
@@ -35,7 +34,7 @@ class Program
 
         // Objective: Find the two Taco Bells that are the farthest apart from one another. 
 
-        string[] lines = File.ReadAllLines(@"../../../CSV_Files/" + csvPath2).Skip(1).ToArray();
+        string[] lines = File.ReadAllLines(@"../../../CSV_Files/" + csvPath1).Skip(1).ToArray();
 
         if (lines.Length == 0)
         {
@@ -68,6 +67,6 @@ class Program
             }
         }
 
-        Console.WriteLine($"The two tacobells with the furthest distance are:\nName A: {locA.Name}\tLatitude: {locA.Location.Latitude}\tLongitude: {locA.Location.Longitude}\nName B: {locB.Name}\tLatitude: {locB.Location.Latitude}\tLongitude: {locB.Location.Longitude}");
+        Console.WriteLine($"The two tacobells with the furthest distance are:\nName A: {locA.Name}\nLatitude: {locA.Location.Latitude}\tLongitude: {locA.Location.Longitude}\n\nName B: {locB.Name}\nLatitude: {locB.Location.Latitude}\tLongitude: {locB.Location.Longitude}");
     }
 }

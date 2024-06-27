@@ -21,9 +21,9 @@ public class TacoParser
             return null;
         }
 
-        string name = cells[0];
-        double latitude = double.Parse(cells[1]);
-        double longitude = double.Parse(cells[2]);
+        string name = cells[2];
+        double latitude = double.Parse(cells[0]);
+        double longitude = double.Parse(cells[1]);
 
         Point point = new Point();
         point.Latitude = latitude;
