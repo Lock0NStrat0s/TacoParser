@@ -20,14 +20,14 @@ class Program
         string filepath = "secret.env";
         Env.Load(@"../../../" + filepath);
 
-        try
-        {
-            WebScraper_GetAddress.RunWebScraper().Wait();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
+        //try
+        //{
+        //    WebScraper_ALLStateCities.RunWebScraper().Wait();
+        //}
+        //catch (Exception ex)
+        //{
+        //    Console.WriteLine(ex.Message);
+        //}
 
         // Objective: Find the two Taco Bells that are the farthest apart from one another. 
 

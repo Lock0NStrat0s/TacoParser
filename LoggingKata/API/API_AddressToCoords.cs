@@ -49,7 +49,7 @@ public static class API_AddressToCoords
 
         if (record.status.code == 200)
         {
-            tacoBellLocation.Name = record.results[0].formatted;
+            tacoBellLocation.Name = record.results[0].formatted.Replace(",", "");
             tacoBellLocation.Location = new Point() { Latitude = record.results[0].geometry.lat, Longitude = record.results[0].geometry.lng };
         }
         else

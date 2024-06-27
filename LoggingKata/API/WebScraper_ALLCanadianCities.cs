@@ -13,13 +13,12 @@ using System.Net.Http.Headers;
 
 namespace LoggingKata.API;
 
-public static class WebScraper_GetAddress
+public static class WebScraper_ALLCanadianCities
 {
     public static async Task RunWebScraper()
     {
-        //string url = "https://locations.tacobell.ca/en/ab/edmonton";
-        //string url = "https://locations.tacobell.com/al/dothan.html";
-        string url = "https://www.tacobell.ca/en/store-locator.html";
+string url = "https://www.tacobell.ca/en/store-locator.html";
+
         List<string> locations = new List<string>();
         try
         {
@@ -88,15 +87,8 @@ public static class WebScraper_GetAddress
             HtmlNodeCollection locationNodes = null;
             try
             {
-                //SPECIFIC CITY IN CANADA
-                //locationNodes = document.DocumentNode.SelectNodes("//div[contains(@class, 'Address-line')]");
-
                 //ALL CANADIAN LOCATIONS
                 locationNodes = document.DocumentNode.SelectNodes("//p[contains(@data-testid, 'store-address')]");
-
-
-                //SPECIFIC CITY IN US
-                //locationNodes = document.DocumentNode.SelectNodes("//div[contains(@class, 'AddressRow')]");
             }
             catch (Exception e)
             {
@@ -105,29 +97,9 @@ public static class WebScraper_GetAddress
 
             if (locationNodes != null)
             {
-                bool flag = false;
-                string temp = "";
-                //foreach (var node in locationNodes)
-                //{
-                //    Extract the text content of each address node
-                //    var address = node.InnerText.Trim();
-
-                //    if (!flag)
-                //    {
-                //        temp += address;
-                //    }
-                //    else
-                //    {
-                //        temp += ", " + address;
-                //        locations.Add(temp);
-                //        temp = "";
-                //    }
-                //    flag = !flag;
-                //}
-
-                for (int i = 2; i < 25; i += 4)
+                foreach (var node in locationNodes)
                 {
-                    var address = locationNodes[i].InnerText.Trim();
+                    var address = node.InnerText.Trim();
                     locations.Add(address);
                 }
             }
