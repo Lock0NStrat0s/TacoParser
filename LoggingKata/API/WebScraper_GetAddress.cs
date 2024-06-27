@@ -8,6 +8,8 @@ using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using System.Net.Http.Headers;
 
 namespace LoggingKata.API;
 
@@ -15,7 +17,9 @@ public static class WebScraper_GetAddress
 {
     public static async Task RunWebScraper()
     {
-        string url = "https://locations.tacobell.ca/en/ab/edmonton";
+        //string url = "https://locations.tacobell.ca/en/ab/edmonton";
+        //string url = "https://locations.tacobell.com/al/dothan.html";
+        string url = "https://www.tacobell.ca/en/store-locator.html";
         List<string> locations = new List<string>();
         try
         {
@@ -29,13 +33,13 @@ public static class WebScraper_GetAddress
         List<TacoBellLocation> tbList = new List<TacoBellLocation>();
         foreach (var location in locations)
         {
-            var coords = await API_AddressToCoords.RunAPI(location);
-TacoBellLocation tbLoc = new TacoBellLocation() { Name = coords.Item2, Location = new Point() { Latitude = coords.Item1.Item1, Longitude = coords.Item1.Item2 } };
-            tbList.Add(tbLoc);
+            var locModel = await API_AddressToCoords.RunAPI(location);
+
+            tbList.Add(locModel);
         }
 
 
-        WriteToCsv(@"../../../CSV_Files/TacoBellCanada.csv", tbList);
+        //WriteToCsv(@"../../../CSV_Files/TacoBellCanada.csv", tbList);
 
     }
 
@@ -45,6 +49,11 @@ TacoBellLocation tbLoc = new TacoBellLocation() { Name = coords.Item2, Location 
 
         using (HttpClient client = new HttpClient())
         {
+            // Set up HttpClient headers
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/html"));
+            client.DefaultRequestHeaders.UserAgent.TryParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
+
             // Fetch the HTML content of the page
             string response = null;
             try
@@ -79,7 +88,15 @@ TacoBellLocation tbLoc = new TacoBellLocation() { Name = coords.Item2, Location 
             HtmlNodeCollection locationNodes = null;
             try
             {
-                locationNodes = document.DocumentNode.SelectNodes("//div[contains(@class, 'Address-line')]");
+                //SPECIFIC CITY IN CANADA
+                //locationNodes = document.DocumentNode.SelectNodes("//div[contains(@class, 'Address-line')]");
+
+                //ALL CANADIAN LOCATIONS
+                locationNodes = document.DocumentNode.SelectNodes("//p[contains(@data-testid, 'store-address')]");
+
+
+                //SPECIFIC CITY IN US
+                //locationNodes = document.DocumentNode.SelectNodes("//div[contains(@class, 'AddressRow')]");
             }
             catch (Exception e)
             {
@@ -90,22 +107,28 @@ TacoBellLocation tbLoc = new TacoBellLocation() { Name = coords.Item2, Location 
             {
                 bool flag = false;
                 string temp = "";
-                foreach (var node in locationNodes)
-                {
-                    // Extract the text content of each address node
-                    var address = node.InnerText.Trim();
+                //foreach (var node in locationNodes)
+                //{
+                //    Extract the text content of each address node
+                //    var address = node.InnerText.Trim();
 
-                    if (!flag)
-                    {
-                        temp += address;
-                    }
-                    else
-                    {
-                        temp += ", " + address;
-                        locations.Add(temp);
-                        temp = "";
-                    }
-                    flag = !flag;
+                //    if (!flag)
+                //    {
+                //        temp += address;
+                //    }
+                //    else
+                //    {
+                //        temp += ", " + address;
+                //        locations.Add(temp);
+                //        temp = "";
+                //    }
+                //    flag = !flag;
+                //}
+
+                for (int i = 2; i < 25; i += 4)
+                {
+                    var address = locationNodes[i].InnerText.Trim();
+                    locations.Add(address);
                 }
             }
             else
